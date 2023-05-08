@@ -1,0 +1,25 @@
+{
+  "cookiecutter": {
+    "codeowner_github_usernames": "@joewesch",
+    "full_name": "Joe Wesch",
+    "email": "github@joewesch.com",
+    "github_org": "joewesch",
+    "plugin_name": "poc_core_model_extension",
+    "verbose_name": "POC Core Model Extension",
+    "plugin_slug": "poc-core-model-extension",
+    "project_slug": "nautobot-plugin-poc-core-model-extension",
+    "repo_url": "https://github.com/joewesch/nautobot-plugin-poc-core-model-extension",
+    "base_url": "poc-core-model-extension",
+    "min_nautobot_version": "1.4.0",
+    "max_nautobot_version": "1.9999",
+    "nautobot_version": "1.5.18",
+    "camel_name": "POCCoreModelExtension",
+    "project_short_description": "POC Core Model Extension",
+    "version": "0.1.0",
+    "model_class_name": "MyModel",
+    "open_source_license": "Apache-2.0",
+    "docs_base_url": "https://docs.nautobot.com",
+    "docs_app_url": "https://docs.nautobot.com/projects/poc-core-model-extension/en/latest",
+    "_template": "git@github.com:networktocode-llc/cookiecutter-ntc"
+  }
+}
