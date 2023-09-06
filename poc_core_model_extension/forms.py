@@ -18,7 +18,9 @@ class MyModelForm(BootstrapMixin, forms.ModelForm):
     """MyModel creation/edit form."""
 
     slug = SlugField()
-    devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    devices = DynamicModelMultipleChoiceField(
+        queryset=Device.objects.all(), required=False, query_params={"poc_core_model_extension_has_mymodel": False}
+    )
 
     class Meta:
         """Meta attributes."""
