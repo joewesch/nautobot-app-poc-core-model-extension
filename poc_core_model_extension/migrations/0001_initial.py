@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mymodel',
             name='devices',
-            field=models.ManyToManyField(blank=True, null=True, related_name='mymodel', through='poc_core_model_extension.MyModelToDevice', to='dcim.Device'),
+            field=models.ManyToManyField(blank=True, related_name='mymodel', through='poc_core_model_extension.MyModelToDevice', to='dcim.Device'),
         ),
         migrations.AddField(
             model_name='mymodel',
