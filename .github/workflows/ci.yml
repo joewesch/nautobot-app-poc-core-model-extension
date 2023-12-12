@@ -82,8 +82,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.8"]
-        nautobot-version: ["1.4.0"]
+        python-version: ["3.9"]
+        nautobot-version: ["2.0.5"]
     env:
       INVOKE_POC_CORE_MODEL_EXTENSION_PYTHON_VER: "${{ matrix.python-version }}"
       INVOKE_POC_CORE_MODEL_EXTENSION_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
@@ -119,16 +119,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.9", "3.10"]
         db-backend: ["postgresql"]
         nautobot-version: ["stable"]
         include:
           - python-version: "3.10"
             db-backend: "postgresql"
-            nautobot-version: "1.4.0"
+            nautobot-version: "2.0.5"
           - python-version: "3.7"
             db-backend: "mysql"
-            nautobot-version: "1.4.0"
+            nautobot-version: "2.0.5"
           - python-version: "3.10"
             db-backend: "mysql"
             nautobot-version: "stable"

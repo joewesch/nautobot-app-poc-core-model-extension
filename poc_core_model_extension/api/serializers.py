@@ -5,8 +5,6 @@ from nautobot.core.api.serializers import ValidatedModelSerializer
 
 from poc_core_model_extension import models
 
-from . import nested_serializers  # noqa: F401, pylint: disable=unused-import
-
 
 class MyModelSerializer(ValidatedModelSerializer):
     """MyModel Serializer."""

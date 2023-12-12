@@ -1,11 +1,11 @@
 """Filtering for poc_core_model_extension."""
 
-from nautobot.utilities.filters import BaseFilterSet, NameSlugSearchFilterSet
+from nautobot.core.filters import BaseFilterSet, NameSearchFilterSet
 
 from poc_core_model_extension import models
 
 
-class MyModelFilterSet(BaseFilterSet, NameSlugSearchFilterSet):
+class MyModelFilterSet(BaseFilterSet, NameSearchFilterSet):
     """Filter for MyModel."""
 
     class Meta:

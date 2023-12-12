@@ -3,7 +3,7 @@ from django import forms
 
 from nautobot.dcim.forms import DeviceForm
 from nautobot.dcim.models import Device
-from nautobot.utilities.forms import (
+from nautobot.core.forms import (
     BootstrapMixin,
     BulkEditForm,
     SlugField,

@@ -38,9 +38,9 @@ namespace = Collection("poc_core_model_extension")
 namespace.configure(
     {
         "poc_core_model_extension": {
-            "nautobot_ver": "1.5.18",
+            "nautobot_ver": "2.0.5",
             "project_name": "poc_core_model_extension",
-            "python_ver": "3.8",
+            "python_ver": "3.9",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
             "compose_files": [

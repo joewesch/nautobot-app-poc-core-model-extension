@@ -1,5 +1,5 @@
 """Unit tests for views."""
-from nautobot.utilities.testing import ViewTestCases
+from nautobot.core.testing import ViewTestCases
 
 from poc_core_model_extension import models
 from poc_core_model_extension.tests import fixtures

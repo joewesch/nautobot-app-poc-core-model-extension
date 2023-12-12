@@ -1,20 +1,28 @@
 """Menu items."""
 
-from nautobot.extras.plugins import PluginMenuButton, PluginMenuItem
-from nautobot.utilities.choices import ButtonColorChoices
+from nautobot.apps.ui import NavMenuItem, NavMenuAddButton, NavMenuTab, NavMenuGroup
 
 menu_items = (
-    PluginMenuItem(
-        link="plugins:poc_core_model_extension:mymodel_list",
-        link_text="POC Core Model Extension",
-        permissions=["poc_core_model_extension.view_mymodel"],
-        buttons=(
-            PluginMenuButton(
-                link="plugins:poc_core_model_extension:mymodel_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["poc_core_model_extension.add_mymodel"],
+    NavMenuTab(
+        name="POC Core Model Extension",
+        weight=100,
+        groups=(
+            NavMenuGroup(
+                name="MyModel",
+                weight=100,
+                items=(
+                    NavMenuItem(
+                        link="plugins:poc_core_model_extension:mymodel_list",
+                        name="MyModel",
+                        permissions=["poc_core_model_extension.view_mymodel"],
+                        buttons=(
+                            NavMenuAddButton(
+                                link="plugins:poc_core_model_extension:mymodel_add",
+                                permissions=["poc_core_model_extension.add_mymodel"],
+                            ),
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
