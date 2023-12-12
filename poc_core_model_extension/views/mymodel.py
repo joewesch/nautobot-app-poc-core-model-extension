@@ -61,3 +61,12 @@ class MyModelBulkEditView(generic.BulkEditView):
     queryset = models.MyModel.objects.all()
     table = tables.MyModelTable
     form = forms.MyModelBulkEditForm
+
+
+class MyModelBulkImportView(generic.BulkImportView):
+    """View for importing one or more MyModel records."""
+
+    queryset = models.MyModel.objects.all()
+    model_form = forms.MyModelCSVForm
+    table = tables.MyModelTable
+    default_return_url = "plugins:poc_core_model_extension:mymodel_list"

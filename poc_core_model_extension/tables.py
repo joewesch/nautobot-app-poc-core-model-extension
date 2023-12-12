@@ -27,6 +27,8 @@ class MyModelTable(BaseTable):
             "pk",
             "name",
             "description",
+            "devices",
+            "address",
         )
 
 
@@ -34,6 +36,5 @@ class DeviceMyModelTable(DeviceTable):
     mymodel = tables.Column(verbose_name="MyModel", accessor="mymodel__first", linkify=True)
 
     class Meta(DeviceTable.Meta):
-
         fields = DeviceTable.Meta.fields + ("mymodel",)
         default_columns = DeviceTable.Meta.default_columns + ("mymodel",)

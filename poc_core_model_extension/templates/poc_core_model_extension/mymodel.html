@@ -95,6 +95,18 @@
                         </ul>
                     </td>
 				</tr>
+				<tr>
+					<td>IP Addresses</td>
+                    <td>
+                        <ul>
+                            {% for address in object.address.all %}
+                                <li>
+									<a href="{% url 'ipam:ipaddress' pk=address.pk %}">{{ address }}</a>
+								</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+				</tr>
 			</table>
 		</div>
 		{% include 'inc/custom_fields_panel.html' %}

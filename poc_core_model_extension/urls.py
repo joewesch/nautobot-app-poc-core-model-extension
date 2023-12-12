@@ -12,6 +12,7 @@ urlpatterns = [
     path("mymodel/add/", mymodel.MyModelCreateView.as_view(), name="mymodel_add"),
     path("mymodel/delete/", mymodel.MyModelBulkDeleteView.as_view(), name="mymodel_bulk_delete"),
     path("mymodel/edit/", mymodel.MyModelBulkEditView.as_view(), name="mymodel_bulk_edit"),
+    path("mymodel/import/", mymodel.MyModelBulkImportView.as_view(), name="mymodel_import"),
     path("mymodel/<slug:slug>/", mymodel.MyModelView.as_view(), name="mymodel"),
     path("mymodel/<slug:slug>/delete/", mymodel.MyModelDeleteView.as_view(), name="mymodel_delete"),
     path("mymodel/<slug:slug>/edit/", mymodel.MyModelEditView.as_view(), name="mymodel_edit"),

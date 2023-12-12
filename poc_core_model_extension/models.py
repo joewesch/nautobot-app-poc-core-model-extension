@@ -27,6 +27,20 @@ class MyModel(PrimaryModel):
         related_name="mymodel",
     )
 
+    address = models.ManyToManyField(
+        "ipam.IPAddress",
+        blank=True,
+        related_name="mymodel",
+    )
+
+    csv_headers = [
+        "name",
+        "slug",
+        "description",
+        "devices",
+        "address",
+    ]
+
     class Meta:
         """Meta class."""
 
@@ -38,7 +52,17 @@ class MyModel(PrimaryModel):
 
     def __str__(self):
         """Stringify instance."""
-        return self.name
+        return str(self.name)
+
+    def to_csv(self):
+        """Return CSV data for MyModel."""
+        return (
+            self.name,
+            self.slug,
+            self.description,
+            ",".join(str(device["name"]) for device in self.devices.values()),
+            ",".join(f"{address['host']}/{address['prefix_length']}" for address in self.address.values()),
+        )
 
 
 class MyModelToDevice(BaseModel):

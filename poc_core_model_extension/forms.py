@@ -3,6 +3,8 @@ from django import forms
 
 from nautobot.dcim.forms import DeviceForm
 from nautobot.dcim.models import Device
+from nautobot.extras.forms import CustomFieldModelCSVForm
+from nautobot.ipam.models import IPAddress
 from nautobot.utilities.forms import (
     BootstrapMixin,
     BulkEditForm,
@@ -14,12 +16,36 @@ from nautobot.utilities.forms import (
 from poc_core_model_extension import models
 
 
+class CSVMultipleModelChoiceField(forms.ModelMultipleChoiceField):
+    """Reference a list of PKs."""
+
+    def prepare_value(self, value):
+        """Parse a comma-separated string of PKs into a list of PKs."""
+        pk_list = []
+        if isinstance(value, str):
+            pk_list = [val.strip() for val in value.split(",") if val]
+
+        return super().prepare_value(pk_list)
+
+
+class CSVIPAddressMultipleModelChoiceField(CSVMultipleModelChoiceField):
+    """CSV Multiple Model Choice Field for IP Addresses."""
+
+    def clean(self, value):
+        value = self.prepare_value(value)
+        return self.queryset.net_in(value)
+
+
 class MyModelForm(BootstrapMixin, forms.ModelForm):
     """MyModel creation/edit form."""
 
     slug = SlugField()
     devices = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(), required=False, query_params={"poc_core_model_extension_has_mymodel": False}
+    )
+    address = DynamicModelMultipleChoiceField(
+        queryset=IPAddress.objects.all(),
+        required=False,
     )
 
     class Meta:
@@ -31,6 +57,7 @@ class MyModelForm(BootstrapMixin, forms.ModelForm):
             "slug",
             "description",
             "devices",
+            "address",
         ]
 
 
@@ -70,6 +97,29 @@ class MyModelFilterForm(BootstrapMixin, forms.ModelForm):
             "slug",
             "description",
         ]
+
+
+class MyModelCSVForm(CustomFieldModelCSVForm):
+    """MyModel CSV form."""
+
+    devices = CSVMultipleModelChoiceField(
+        queryset=Device.objects.all(),
+        required=False,
+        to_field_name="name",
+        help_text="Comma-separated list of device names",
+    )
+    address = CSVIPAddressMultipleModelChoiceField(
+        queryset=IPAddress.objects.all(),
+        required=False,
+        to_field_name="address",
+        help_text="Comma-separated list of IP addresses",
+    )
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.MyModel
+        fields = models.MyModel.csv_headers
 
 
 class DeviceMyModelForm(DeviceForm):
