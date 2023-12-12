@@ -32,7 +32,7 @@ class MyModel(PrimaryModel):
 
         ordering = ["name"]
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, api=False):
         """Return detail view for MyModel."""
         return reverse("plugins:poc_core_model_extension:mymodel", args=[self.slug])
 

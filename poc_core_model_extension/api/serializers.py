@@ -1,14 +1,86 @@
 """API serializers for poc_core_model_extension."""
 from rest_framework import serializers
 
-from nautobot.core.api.serializers import ValidatedModelSerializer
+from nautobot.core.api.fields import SerializedPKRelatedField
+from nautobot.core.api.serializers import ValidatedModelSerializer, BaseModelSerializer
+from nautobot.core.utils.data import is_uuid
+from nautobot.dcim.api.serializers import DeviceSerializer
+from nautobot.dcim.models import Device
 
 from poc_core_model_extension import models
 
-from . import nested_serializers  # noqa: F401, pylint: disable=unused-import
+
+class DeviceRelatedField(SerializedPKRelatedField):
+    """Device field."""
+
+    def to_internal_value(self, data):
+        """To internal value method for DeviceField.
+
+        This method accepts a UUID, a name, or a dictionary of attributes.
+        """
+        if is_uuid(data):
+            return Device.objects.get(pk=data)
+        if isinstance(data, str):
+            return Device.objects.get(name=data)
+        if isinstance(data, dict):
+            return Device.objects.get(**data)
+        raise serializers.ValidationError("Invalid device: {}".format(data))
+
+    def to_representation(self, value):
+        return {"id": value.pk, "name": value.name, "url": value.get_absolute_url()}
 
 
-class MyModelSerializer(ValidatedModelSerializer):
+class DeviceModelSerializerMixin(BaseModelSerializer):
+    """Mixin to enable a writable M2M Device field."""
+
+    devices = DeviceRelatedField(many=True, queryset=Device.objects.all(), serializer=DeviceSerializer)
+
+    def get_field_names(self, declared_fields, info):
+        """Get field names for MyModelSerializer."""
+        fields = super().get_field_names(declared_fields, info)
+        if not self.is_nested:
+            self.extend_field_names(fields, "devices")
+        return fields
+
+    def create(self, validated_data):
+        """Create method for MyModelSerializer."""
+        devices = validated_data.pop("devices", None)
+        instance = super().create(validated_data)
+
+        if devices is not None:
+            return self._save_devices(instance, devices)
+
+        return instance
+
+    def update(self, instance, validated_data):
+        """Update method for MyModelSerializer."""
+        devices = validated_data.pop("devices", None)
+
+        instance = super().update(instance, validated_data)
+
+        if devices is not None:
+            return self._save_devices(instance, devices)
+
+        return instance
+
+    def _save_devices(self, instance, devices):
+        if devices:
+            instance.devices.set(devices)
+        else:
+            instance.devices.clear()
+
+        return instance
+
+    def to_representation(self, instance):
+        """Representation method for MyModelSerializer."""
+        data = super().to_representation(instance)
+        if self._is_csv_request() and data.get("devices"):
+            # Export device names for CSV
+            data["devices"] = list(instance.devices.values_list("name", flat=True))
+        return data
+
+
+class MyModelSerializer(DeviceModelSerializerMixin, ValidatedModelSerializer):
     """MyModel Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:poc_core_model_extension-api:mymodel-detail")

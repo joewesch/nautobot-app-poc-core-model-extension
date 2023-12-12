@@ -1,5 +1,5 @@
 """Unit tests for poc_core_model_extension."""
-from nautobot.utilities.testing import APIViewTestCases
+from nautobot.core.testing import APIViewTestCases
 
 from poc_core_model_extension import models
 from poc_core_model_extension.tests import fixtures

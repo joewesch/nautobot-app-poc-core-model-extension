@@ -1,6 +1,6 @@
 """Filter extensions for poc_core_model_extension plugin."""
 from nautobot.apps.filters import FilterExtension, MultiValueCharFilter, RelatedMembershipBooleanFilter
-from nautobot.utilities.forms import DynamicModelChoiceField
+from nautobot.core.forms import DynamicModelChoiceField
 
 from poc_core_model_extension.models import MyModel
 
