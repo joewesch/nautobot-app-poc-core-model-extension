@@ -49,6 +49,7 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.19"
 mkdocstrings-python = "0.7.1"
+pylint-nautobot = "^0.2.1"
 
 [tool.poetry.extras]
 nautobot = ["nautobot"]
@@ -78,7 +79,7 @@ exclude = '''
 
 [tool.pylint.master]
 # Include the pylint_django plugin to avoid spurious warnings about Django patterns
-load-plugins="pylint_django"
+load-plugins="pylint_nautobot"
 ignore=".venv"
 
 [tool.pylint.basic]
@@ -120,3 +121,9 @@ testpaths = [
     "tests"
 ]
 addopts = "-vv --doctest-modules"
+
+[tool.pylint-nautobot]
+supported_nautobot_versions = [
+    "1",
+    "2",
+]
