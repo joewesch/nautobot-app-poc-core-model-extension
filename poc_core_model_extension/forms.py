@@ -1,8 +1,6 @@
 """Forms for poc_core_model_extension."""
 from django import forms
 
-from nautobot.dcim.forms import DeviceForm
-from nautobot.dcim.models import Device
 from nautobot.core.forms import (
     BootstrapMixin,
     BulkEditForm,
@@ -10,6 +8,9 @@ from nautobot.core.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
 )
+from nautobot.dcim.forms import DeviceForm
+from nautobot.dcim.models import Device
+from nautobot.ipam.models import IPAddress
 
 from poc_core_model_extension import models
 
@@ -21,6 +22,7 @@ class MyModelForm(BootstrapMixin, forms.ModelForm):
     devices = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(), required=False, query_params={"poc_core_model_extension_has_mymodel": False}
     )
+    ip_addresses = DynamicModelMultipleChoiceField(queryset=IPAddress.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
@@ -31,6 +33,7 @@ class MyModelForm(BootstrapMixin, forms.ModelForm):
             "slug",
             "description",
             "devices",
+            "ip_addresses",
         ]
 
 

@@ -7,9 +7,15 @@
 			<table class="table table-hover panel-body attr-table">
 				<tr>
 					<td>MyModel</td>
+					{% if object.mymodel.exists %}
                     <td>
                         <a href="{% url 'plugins:poc_core_model_extension:mymodel' slug=object.mymodel.first.slug %}">{{ object.mymodel.first }}</a>
                     </td>
+					{% else %}
+					<td>
+						None
+					</td>
+					{% endif %}
 				</tr>
 			</table>
 		</div>

@@ -28,6 +28,7 @@ class MyModelTable(BaseTable):
             "name",
             "description",
             "devices",
+            "ip_addresses",
         )
 
 
