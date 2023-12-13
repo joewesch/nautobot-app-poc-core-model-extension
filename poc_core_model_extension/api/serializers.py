@@ -12,8 +12,8 @@ from nautobot.ipam.models import IPAddress
 from poc_core_model_extension import models
 
 
-class M2MRelatedField(SerializedPKRelatedField):
-    """Many to Many related field."""
+class DeviceRelatedField(SerializedPKRelatedField):
+    """Device related field."""
 
     def to_internal_value(self, data):
         """To internal value method for DeviceField.
@@ -29,15 +29,29 @@ class M2MRelatedField(SerializedPKRelatedField):
             return queryset.get(**data)
         raise serializers.ValidationError("Invalid device: {}".format(data))
 
-
-class DeviceRelatedField(M2MRelatedField):
     def to_representation(self, value):
         return {"id": value.pk, "name": value.name, "url": value.get_absolute_url()}
 
 
-class IPAddressRelatedField(M2MRelatedField):
+class IPAddressRelatedField(SerializedPKRelatedField):
+    """IPAddress related field."""
+
+    def to_internal_value(self, data):
+        """To internal value method for DeviceField.
+
+        This method accepts a UUID, an address, or a dictionary of attributes.
+        """
+        queryset = self.get_queryset()
+        if is_uuid(data):
+            return queryset.get(pk=data)
+        if isinstance(data, str):
+            return queryset.get(address=data)
+        if isinstance(data, dict):
+            return queryset.get(**data)
+        raise serializers.ValidationError("Invalid device: {}".format(data))
+
     def to_representation(self, value):
-        return {"id": value.pk, "address": value.address, "url": value.get_absolute_url()}
+        return {"id": value.pk, "address": str(value.address), "url": value.get_absolute_url()}
 
 
 class DeviceModelSerializerMixin(BaseModelSerializer):
@@ -61,9 +75,9 @@ class DeviceModelSerializerMixin(BaseModelSerializer):
         instance = super().create(validated_data)
 
         if devices is not None:
-            return self._save_devices(instance, devices)
+            instance = self._save_devices(instance, devices)
         if ip_addresses is not None:
-            return self._save_ip_addresses(instance, ip_addresses)
+            instance = self._save_ip_addresses(instance, ip_addresses)
 
         return instance
 
@@ -75,10 +89,10 @@ class DeviceModelSerializerMixin(BaseModelSerializer):
         instance = super().update(instance, validated_data)
 
         if devices is not None:
-            return self._save_devices(instance, devices)
+            instance = self._save_devices(instance, devices)
 
         if ip_addresses is not None:
-            return self._save_ip_addresses(instance, ip_addresses)
+            instance = self._save_ip_addresses(instance, ip_addresses)
 
         return instance
 
