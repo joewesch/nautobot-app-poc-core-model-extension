@@ -7,7 +7,16 @@ class DeviceMyModel(TemplateExtension):
     model = "dcim.device"
 
     def right_page(self):
-        return self.render("poc_core_model_extension/device_mymodel.html")
+        return self.render("poc_core_model_extension/mymodel_extension.html")
 
 
-template_extensions = [DeviceMyModel]
+class IPAddressMyModel(TemplateExtension):
+    """Template extension to display MyModel on the right side of the page."""
+
+    model = "ipam.ipaddress"
+
+    def right_page(self):
+        return self.render("poc_core_model_extension/mymodel_extension.html")
+
+
+template_extensions = [DeviceMyModel, IPAddressMyModel]

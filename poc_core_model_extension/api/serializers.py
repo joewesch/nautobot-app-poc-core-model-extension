@@ -16,7 +16,7 @@ class DeviceRelatedField(SerializedPKRelatedField):
     """Device related field."""
 
     def to_internal_value(self, data):
-        """To internal value method for DeviceField.
+        """To internal value method for DeviceRelatedField.
 
         This method accepts a UUID, a name, or a dictionary of attributes.
         """
@@ -37,7 +37,7 @@ class IPAddressRelatedField(SerializedPKRelatedField):
     """IPAddress related field."""
 
     def to_internal_value(self, data):
-        """To internal value method for DeviceField.
+        """To internal value method for IPAddressRelatedField.
 
         This method accepts a UUID, an address, or a dictionary of attributes.
         """
