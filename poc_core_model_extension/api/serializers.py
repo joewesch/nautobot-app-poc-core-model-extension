@@ -121,7 +121,8 @@ class DeviceModelSerializerMixin(BaseModelSerializer):
                 data["devices"] = list(instance.devices.values_list("name", flat=True))
             if data.get("ip_addresses"):
                 # Export ip_address addresses for CSV
-                data["ip_addresses"] = list(instance.ip_addresses.values_list("address", flat=True))
+                # Because 'address' is not a field on the model, we can't use values_list
+                data["ip_addresses"] = [str(ip.address) for ip in instance.ip_addresses.all()]
         return data
 
 
