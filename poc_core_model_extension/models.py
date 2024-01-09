@@ -27,6 +27,13 @@ class MyModel(PrimaryModel):
         related_name="mymodel",
     )
 
+    ip_addresses = models.ManyToManyField(
+        "ipam.IPAddress",
+        blank=True,
+        through="MyModelToIPAddress",
+        related_name="mymodel",
+    )
+
     class Meta:
         """Meta class."""
 
@@ -46,3 +53,10 @@ class MyModelToDevice(BaseModel):
 
     mymodel = models.ForeignKey(MyModel, on_delete=models.CASCADE)
     device = models.OneToOneField("dcim.Device", on_delete=models.CASCADE)
+
+
+class MyModelToIPAddress(BaseModel):
+    """Through model for tying many MyModels to one IPAddress."""
+
+    mymodel = models.ForeignKey(MyModel, on_delete=models.CASCADE)
+    ip_address = models.OneToOneField("ipam.IPAddress", on_delete=models.CASCADE)

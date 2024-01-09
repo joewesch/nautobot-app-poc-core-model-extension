@@ -1,3 +1,4 @@
+{% load helpers %}
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
@@ -8,7 +9,7 @@
 				<tr>
 					<td>MyModel</td>
                     <td>
-                        <a href="{% url 'plugins:poc_core_model_extension:mymodel' slug=object.mymodel.first.slug %}">{{ object.mymodel.first }}</a>
+                        <a {% if object.mymodel.exists %}href="{% url 'plugins:poc_core_model_extension:mymodel' slug=object.mymodel.first.slug %}"{% endif %}>{{ object.mymodel.first | placeholder }}</a>
                     </td>
 				</tr>
 			</table>

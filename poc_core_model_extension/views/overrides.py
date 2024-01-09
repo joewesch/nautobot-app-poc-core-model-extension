@@ -2,10 +2,10 @@
 from django.shortcuts import render
 
 from nautobot.dcim.views import DeviceEditView, DeviceListView
-from nautobot.ipam.views import PrefixEditView
+from nautobot.ipam.views import PrefixEditView, IPAddressEditView, IPAddressListView
 
-from poc_core_model_extension.forms import DeviceMyModelForm
-from poc_core_model_extension.tables import DeviceMyModelTable
+from poc_core_model_extension.forms import DeviceMyModelForm, IPAddressMyModelForm
+from poc_core_model_extension.tables import DeviceMyModelTable, IPAddressMyModelTable
 
 
 class DeviceMyModelEditView(DeviceEditView):
@@ -17,6 +17,17 @@ class DeviceMyModelEditView(DeviceEditView):
 
 class DeviceMyModelListView(DeviceListView):
     table = DeviceMyModelTable
+
+
+class IPAddressMyModelEditView(IPAddressEditView):
+    """Sub-class of IPAddressEditView to override the form used for editing IP addresses."""
+
+    model_form = IPAddressMyModelForm
+    template_name = "poc_core_model_extension/ipaddress_edit_override.html"
+
+
+class IPAddressMyModelListView(IPAddressListView):
+    table = IPAddressMyModelTable
 
 
 class DisablePrefixStatusOverrideView(PrefixEditView):
@@ -54,4 +65,7 @@ override_views = {
     "dcim:device_edit": DeviceMyModelEditView.as_view(),
     "dcim:device_list": DeviceMyModelListView.as_view(),
     "ipam:prefix_edit": DisablePrefixStatusOverrideView.as_view(),
+    "ipam:ipaddress_add": IPAddressMyModelEditView.as_view(),
+    "ipam:ipaddress_edit": IPAddressMyModelEditView.as_view(),
+    "ipam:ipaddress_list": IPAddressMyModelListView.as_view(),
 }

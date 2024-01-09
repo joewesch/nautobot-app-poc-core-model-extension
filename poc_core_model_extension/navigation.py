@@ -4,7 +4,7 @@ from nautobot.apps.ui import NavMenuItem, NavMenuAddButton, NavMenuTab, NavMenuG
 
 menu_items = (
     NavMenuTab(
-        name="POC Core Model Extension",
+        name="Devices",
         weight=100,
         groups=(
             NavMenuGroup(
