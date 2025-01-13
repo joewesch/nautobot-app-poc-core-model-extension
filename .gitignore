@@ -303,6 +303,7 @@ development/*.txt
 invoke.yml
 
 # Docs
-docs/README.md
-docs/CHANGELOG.md
 public
+/compose.yaml
+/dump.sql
+/poc_core_model_extension/static/poc_core_model_extension/docs

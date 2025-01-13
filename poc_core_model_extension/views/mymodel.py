@@ -1,63 +1,19 @@
-"""Views for MyModel."""
+"""Views for poc_core_model_extension."""
 
-from nautobot.core.views import generic
+from nautobot.apps.views import NautobotUIViewSet
 
 from poc_core_model_extension import filters, forms, models, tables
+from poc_core_model_extension.api import serializers
 
 
-class MyModelListView(generic.ObjectListView):
-    """List view."""
+class MyModelUIViewSet(NautobotUIViewSet):
+    """ViewSet for MyModel views."""
 
+    bulk_update_form_class = forms.MyModelBulkEditForm
+    filterset_class = filters.MyModelFilterSet
+    filterset_form_class = forms.MyModelFilterForm
+    form_class = forms.MyModelForm
+    lookup_field = "slug"
     queryset = models.MyModel.objects.all()
-    # These aren't needed for simple models, but we can always add
-    # this search functionality.
-    filterset = filters.MyModelFilterSet
-    filterset_form = forms.MyModelFilterForm
-    table = tables.MyModelTable
-
-    # Option for modifying the top right buttons on the list view:
-    # action_buttons = ("add", "import", "export")
-
-
-class MyModelView(generic.ObjectView):
-    """Detail view."""
-
-    queryset = models.MyModel.objects.all()
-
-
-class MyModelCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.MyModel
-    queryset = models.MyModel.objects.all()
-    model_form = forms.MyModelForm
-
-
-class MyModelDeleteView(generic.ObjectDeleteView):
-    """Delete view."""
-
-    model = models.MyModel
-    queryset = models.MyModel.objects.all()
-
-
-class MyModelEditView(generic.ObjectEditView):
-    """Edit view."""
-
-    model = models.MyModel
-    queryset = models.MyModel.objects.all()
-    model_form = forms.MyModelForm
-
-
-class MyModelBulkDeleteView(generic.BulkDeleteView):
-    """View for deleting one or more MyModel records."""
-
-    queryset = models.MyModel.objects.all()
-    table = tables.MyModelTable
-
-
-class MyModelBulkEditView(generic.BulkEditView):
-    """View for editing one or more MyModel records."""
-
-    queryset = models.MyModel.objects.all()
-    table = tables.MyModelTable
-    form = forms.MyModelBulkEditForm
+    serializer_class = serializers.MyModelSerializer
+    table_class = tables.MyModelTable

@@ -1,10 +1,10 @@
 ---
 dev_addr: "127.0.0.1:8001"
-edit_uri: "edit/develop/docs"
+edit_uri: "edit/main/docs"
 site_dir: "poc_core_model_extension/static/poc_core_model_extension/docs"
 site_name: "POC Core Model Extension Documentation"
 site_url: "https://docs.nautobot.com/projects/poc-core-model-extension/en/latest/"
-repo_url: "https://github.com/joewesch/nautobot-plugin-poc-core-model-extension"
+repo_url: "https://github.com/joewesch/nautobot-app-poc-core-model-extension"
 copyright: "Copyright &copy; The Authors"
 theme:
   name: "material"
@@ -14,13 +14,17 @@ theme:
     - "django"
     - "yaml"
   features:
-    - "navigation.tracking"
+    - "content.action.edit"
+    - "content.action.view"
+    - "content.code.copy"
+    - "navigation.footer"
+    - "navigation.indexes"
     - "navigation.tabs"
     - "navigation.tabs.sticky"
-    - "search.suggest"
+    - "navigation.tracking"
     - "search.highlight"
     - "search.share"
-    - "navigation.indexes"
+    - "search.suggest"
   favicon: "assets/favicon.ico"
   logo: "assets/nautobot_logo.svg"
   palette:
@@ -68,6 +72,8 @@ extra:
       link: "https://twitter.com/networktocode"
       name: "Network to Code Twitter"
 markdown_extensions:
+  - "markdown_version_annotations":
+      admonition_tag: "???"
   - "admonition"
   - "toc":
       permalink: true
@@ -77,11 +83,14 @@ markdown_extensions:
       anchor_linenums: true
   - "pymdownx.inlinehilite"
   - "pymdownx.snippets"
-  - "pymdownx.superfences"
+  - "pymdownx.superfences":
+      custom_fences:
+        - name: "mermaid"
+          class: "mermaid"
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - "footnotes"
 plugins:
   - "search"
-  - "mkdocs-version-annotations"
   - "mkdocstrings":
       default_handler: "python"
       handlers:
@@ -112,6 +121,7 @@ nav:
       - Extending the App: "dev/extending.md"
       - Contributing to the App: "dev/contributing.md"
       - Development Environment: "dev/dev_environment.md"
+      - Release Checklist: "dev/release_checklist.md"
       - Architecture Decision Records: "dev/arch_decision.md"
       - Code Reference:
           - "dev/code_reference/index.md"

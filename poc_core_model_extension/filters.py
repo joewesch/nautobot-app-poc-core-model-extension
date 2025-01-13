@@ -1,6 +1,6 @@
 """Filtering for poc_core_model_extension."""
 
-from nautobot.core.filters import BaseFilterSet, NameSearchFilterSet
+from nautobot.apps.filters import BaseFilterSet, NameSearchFilterSet
 
 from poc_core_model_extension import models
 
