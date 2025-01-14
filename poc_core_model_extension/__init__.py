@@ -1,14 +1,15 @@
-"""Plugin declaration for poc_core_model_extension."""
+"""App declaration for poc_core_model_extension."""
+
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
 
+from nautobot.apps import NautobotAppConfig
+
 __version__ = metadata.version(__name__)
 
-from nautobot.extras.plugins import PluginConfig
 
-
-class POCCoreModelExtensionConfig(PluginConfig):
-    """Plugin configuration for the poc_core_model_extension plugin."""
+class POCCoreModelExtensionConfig(NautobotAppConfig):
+    """App configuration for the poc_core_model_extension app."""
 
     name = "poc_core_model_extension"
     verbose_name = "POC Core Model Extension"

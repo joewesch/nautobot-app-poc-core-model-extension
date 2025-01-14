@@ -1,12 +1,15 @@
 ---
 poc_core_model_extension:
-  project_name: "poc-core-model-extension"
-  nautobot_ver: "1.5.18"
-  local: false
-  python_ver: "3.8"
-  compose_dir: "development"
-  compose_files:
-    - "docker-compose.base.yml"
-    - "docker-compose.redis.yml"
-    - "docker-compose.postgres.yml"
-    - "docker-compose.dev.yml"
+  nautobot_ver: "2.0.0"
+  python_ver: "3.11"
+  # local: false
+  # compose_dir: "/full/path/to/nautobot-app-poc-core-model-extension/development"
+
+# The following is an example of using MySQL as the database backend
+# ---
+# poc_core_model_extension:
+#   compose_files:
+#     - "docker-compose.base.yml"
+#     - "docker-compose.redis.yml"
+#     - "docker-compose.mysql.yml"
+#     - "docker-compose.dev.yml"
