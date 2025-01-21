@@ -1,11 +1,25 @@
 """Views for MyModel."""
+
 from django.shortcuts import render
 
-from nautobot.dcim.views import DeviceEditView, DeviceListView
+from nautobot.dcim.views import (
+    DeviceEditView,
+    DeviceListView,
+    LocationEditView,
+    LocationListView,
+)
 from nautobot.ipam.views import PrefixEditView, IPAddressEditView, IPAddressListView
 
-from poc_core_model_extension.forms import DeviceMyModelForm, IPAddressMyModelForm
-from poc_core_model_extension.tables import DeviceMyModelTable, IPAddressMyModelTable
+from poc_core_model_extension.forms import (
+    DeviceMyModelForm,
+    IPAddressMyModelForm,
+    LocationMyModelForm,
+)
+from poc_core_model_extension.tables import (
+    DeviceMyModelTable,
+    IPAddressMyModelTable,
+    LocationMyModelTable,
+)
 
 
 class DeviceMyModelEditView(DeviceEditView):
@@ -30,13 +44,27 @@ class IPAddressMyModelListView(IPAddressListView):
     table = IPAddressMyModelTable
 
 
+class LocationMyModelEditView(LocationEditView):
+    """Sub-class of LocationEditView to override the form used for editing locations."""
+
+    model_form = LocationMyModelForm
+    template_name = "poc_core_model_extension/location_edit_override.html"
+
+
+class LocationMyModelListView(LocationListView):
+    table = LocationMyModelTable
+
+
 class DisablePrefixStatusOverrideView(PrefixEditView):
     def post(self, request, *args, **kwargs):
         """Override post method to limit the ability to change the Status to a specific Group."""
         obj = self.get_object(kwargs)
         form = self.model_form(data=request.POST, files=request.FILES, instance=obj)
         # Only process the custom validation if the form is otherwise valid
-        if form.is_valid() and request.user.groups.filter(name="Disable Status").exists():
+        if (
+            form.is_valid()
+            and request.user.groups.filter(name="Disable Status").exists()
+        ):
             current_obj = self.queryset.get(pk=obj.pk)
             current_status = current_obj.status
             new_status = form.cleaned_data["status"]
@@ -68,4 +96,7 @@ override_views = {
     "ipam:ipaddress_add": IPAddressMyModelEditView.as_view(),
     "ipam:ipaddress_edit": IPAddressMyModelEditView.as_view(),
     "ipam:ipaddress_list": IPAddressMyModelListView.as_view(),
+    "dcim:location_add": LocationMyModelEditView.as_view(),
+    "dcim:location_edit": LocationMyModelEditView.as_view(),
+    "dcim:location_list": LocationMyModelListView.as_view(),
 }

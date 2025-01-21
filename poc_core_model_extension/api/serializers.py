@@ -1,4 +1,5 @@
 """API serializers for poc_core_model_extension."""
+
 from rest_framework import serializers
 
 from nautobot.core.api.fields import SerializedPKRelatedField
@@ -51,14 +52,38 @@ class IPAddressRelatedField(SerializedPKRelatedField):
         raise serializers.ValidationError("Invalid device: {}".format(data))
 
     def to_representation(self, value):
-        return {"id": value.pk, "address": str(value.address), "url": value.get_absolute_url()}
+        return {
+            "id": value.pk,
+            "address": str(value.address),
+            "url": value.get_absolute_url(),
+        }
+
+
+class LocationRelatedField(SerializedPKRelatedField):
+    """Location related field."""
+
+    def to_internal_value(self, data):
+        """To internal value method for LocationRelatedField."""
+        queryset = self.get_queryset()
+        if is_uuid(data):
+            return queryset.get(pk=data)
+        if isinstance(data, str):
+            return queryset.get(name=data)
+        raise serializers.ValidationError("Invalid location: {}".format(data))
+
+    def to_representation(self, value):
+        return {"id": value.pk, "name": value.name, "url": value.get_absolute_url()}
 
 
 class DeviceModelSerializerMixin(BaseModelSerializer):
     """Mixin to enable a writable M2M Device field."""
 
-    devices = DeviceRelatedField(many=True, queryset=Device.objects.all(), serializer=DeviceSerializer)
-    ip_addresses = IPAddressRelatedField(many=True, queryset=IPAddress.objects.all(), serializer=IPAddressSerializer)
+    devices = DeviceRelatedField(
+        many=True, queryset=Device.objects.all(), serializer=DeviceSerializer
+    )
+    ip_addresses = IPAddressRelatedField(
+        many=True, queryset=IPAddress.objects.all(), serializer=IPAddressSerializer
+    )
 
     def get_field_names(self, declared_fields, info):
         """Get field names for MyModelSerializer."""
@@ -122,14 +147,18 @@ class DeviceModelSerializerMixin(BaseModelSerializer):
             if data.get("ip_addresses"):
                 # Export ip_address addresses for CSV
                 # Because 'address' is not a field on the model, we can't use values_list
-                data["ip_addresses"] = [str(ip.address) for ip in instance.ip_addresses.all()]
+                data["ip_addresses"] = [
+                    str(ip.address) for ip in instance.ip_addresses.all()
+                ]
         return data
 
 
 class MyModelSerializer(DeviceModelSerializerMixin, ValidatedModelSerializer):
     """MyModel Serializer."""
 
-    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:poc_core_model_extension-api:mymodel-detail")
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:poc_core_model_extension-api:mymodel-detail"
+    )
 
     class Meta:
         """Meta attributes."""
