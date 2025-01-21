@@ -1,4 +1,5 @@
 """Forms for poc_core_model_extension."""
+
 from django import forms
 
 from nautobot.core.forms import (
@@ -12,6 +13,8 @@ from nautobot.dcim.forms import DeviceForm
 from nautobot.dcim.models import Device
 from nautobot.ipam.forms import IPAddressForm
 from nautobot.ipam.models import IPAddress
+from nautobot.dcim.models import Location
+from nautobot.dcim.forms import LocationForm
 
 from poc_core_model_extension import models
 
@@ -21,10 +24,19 @@ class MyModelForm(BootstrapMixin, forms.ModelForm):
 
     slug = SlugField()
     devices = DynamicModelMultipleChoiceField(
-        queryset=Device.objects.all(), required=False, query_params={"poc_core_model_extension_has_mymodel": False}
+        queryset=Device.objects.all(),
+        required=False,
+        query_params={"poc_core_model_extension_has_mymodel": False},
     )
     ip_addresses = DynamicModelMultipleChoiceField(
-        queryset=IPAddress.objects.all(), required=False, query_params={"poc_core_model_extension_has_mymodel": False}
+        queryset=IPAddress.objects.all(),
+        required=False,
+        query_params={"poc_core_model_extension_has_mymodel": False},
+    )
+    locations = DynamicModelMultipleChoiceField(
+        queryset=Location.objects.all(),
+        required=False,
+        query_params={"poc_core_model_extension_has_mymodel": False},
     )
 
     class Meta:
@@ -43,7 +55,9 @@ class MyModelForm(BootstrapMixin, forms.ModelForm):
 class MyModelBulkEditForm(BootstrapMixin, BulkEditForm):
     """MyModel bulk edit form."""
 
-    pk = forms.ModelMultipleChoiceField(queryset=models.MyModel.objects.all(), widget=forms.MultipleHiddenInput)
+    pk = forms.ModelMultipleChoiceField(
+        queryset=models.MyModel.objects.all(), widget=forms.MultipleHiddenInput
+    )
     description = forms.CharField(required=False)
 
     class Meta:
@@ -81,7 +95,9 @@ class MyModelFilterForm(BootstrapMixin, forms.ModelForm):
 class DeviceMyModelForm(DeviceForm):
     """Sub-class of DeviceForm to add mymodel field."""
 
-    mymodel = DynamicModelChoiceField(queryset=models.MyModel.objects.all(), required=False)
+    mymodel = DynamicModelChoiceField(
+        queryset=models.MyModel.objects.all(), required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -101,7 +117,9 @@ class DeviceMyModelForm(DeviceForm):
 class IPAddressMyModelForm(IPAddressForm):
     """Sub-class of IPAddressForm to add mymodel field."""
 
-    mymodel = DynamicModelChoiceField(queryset=models.MyModel.objects.all(), required=False)
+    mymodel = DynamicModelChoiceField(
+        queryset=models.MyModel.objects.all(), required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -116,3 +134,25 @@ class IPAddressMyModelForm(IPAddressForm):
         else:
             ip_address.mymodel.clear()
         return ip_address
+
+
+class LocationMyModelForm(LocationForm):
+    """Sub-class of LocationForm to add mymodel field."""
+
+    mymodel = DynamicModelChoiceField(
+        queryset=models.MyModel.objects.all(), required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.initial["mymodel"] = self.instance.mymodel.first()
+
+    def save(self, *args, **kwargs):
+        """Save the form."""
+        location = super().save(*args, **kwargs)
+        if self.cleaned_data["mymodel"]:
+            location.mymodel.set([self.cleaned_data["mymodel"]])
+            location.save()
+        else:
+            location.mymodel.clear()
+        return location

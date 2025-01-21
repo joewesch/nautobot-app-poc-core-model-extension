@@ -1,0 +1,13 @@
+{% extends 'dcim/location_edit.html' %}
+{% load helpers %}
+{% load form_helpers %}
+
+{% block form %}
+{{ block.super }}
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>POC Core Model Extension</strong></div>
+    <div class="panel-body">
+        {% render_field form.mymodel %}
+    </div>
+</div>
+{% endblock %}
